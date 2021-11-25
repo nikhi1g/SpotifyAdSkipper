@@ -1,22 +1,27 @@
+import subprocess
+
 import requests
 import time
-
-
+import os
 from pprint import pprint
-#https://developer.spotify.com/console/get-user-player/?market=&additional_types=
+import keyboard
+from threading import Thread
+from subprocess import call
+
 SPOTIFY_GET_CURRENT_TRACK_URL = 'https://api.spotify.com/v1/me/player/currently-playing'
 ACCESS_TOKEN = ''
 
 AD_PLAYING = False
 
+
 def get_current_track(access_token):
-    response = requests.get(
-        SPOTIFY_GET_CURRENT_TRACK_URL,
-        headers={
-            "Authorization": f"Bearer {access_token}"
-        }
-    )
     try:
+        response = requests.get(
+            SPOTIFY_GET_CURRENT_TRACK_URL,
+            headers={
+                "Authorization": f"Bearer {access_token}"
+            }
+        )
         json_resp = response.json()
 
         track_id = json_resp['item']['id']
@@ -35,33 +40,56 @@ def get_current_track(access_token):
         }
 
         return current_track_info
-    except Exception:#TypeError:
-        return None
+
+    except Exception as e:
+        print(e, 'in get_current_track')
+        close()
+        open()
+        play()
+        minimize()
+        time.sleep(1)
+        main()
+
 
 
 def main():
     current_track_id = None
-    global AD_PLAYING
-    AD_PLAYING = False
     while True:
         current_track_info = get_current_track(ACCESS_TOKEN)
+
         try:
             if current_track_info['id'] != current_track_id:
-                # pprint(
-                #     current_track_info,
-                #     indent=4,
-                #)
-
+                pprint(
+                    current_track_info,
+                    indent=40,
+                )
+                print(' ')
                 current_track_id = current_track_info['id']
-                current_track_name = current_track_info['track_name']
-                current_track_artist = current_track_info['artists']
-                print(current_track_name,'by',current_track_artist)
-        except Exception:#TypeError:
-            print('Ad DETECTED! (if ACCESS_TOKEN expired, program will constantly open and close Spotify. Please get a new token.)')
-            AD_PLAYING = True
-            break
+        except Exception as e:
+            print(e, 'in main')
+            main()
+            #break
+
         time.sleep(1)
 
 
+def close():
+    os.system("pkill Spotify")
+    time.sleep(0.4)
+
+
+def open():
+    os.system("open -a Spotify")
+    time.sleep(0.4)
+
+
+def play():
+    subprocess.call(['osascript', '-e', 'tell application "Spotify" to play'])
+
+def pause():
+    subprocess.call(['osascript', '-e', 'tell application "Spotify" to pause'])
+
+def minimize():
+    keyboard.press('command+m')
 if __name__ == '__main__':
     main()
