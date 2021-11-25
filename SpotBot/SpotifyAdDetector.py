@@ -9,7 +9,7 @@ from threading import Thread
 from subprocess import call
 
 SPOTIFY_GET_CURRENT_TRACK_URL = 'https://api.spotify.com/v1/me/player/currently-playing'
-ACCESS_TOKEN = ''
+ACCESS_TOKEN = 'w'
 
 AD_PLAYING = False
 
@@ -42,6 +42,10 @@ def get_current_track(access_token):
         return current_track_info
 
     except Exception as e:
+        if KeyError:
+            global ACCESS_TOKEN
+            os.system("open https://developer.spotify.com/console/get-user-player/?market=&additional_types=")
+            ACCESS_TOKEN = input("Enter Key: ")
         print(e, 'in get_current_track')
         close()
         open()
@@ -75,12 +79,12 @@ def main():
 
 def close():
     os.system("pkill Spotify")
-    time.sleep(0.4)
+    #time.sleep(0.4)
 
 
 def open():
     os.system("open -a Spotify")
-    time.sleep(0.4)
+    #time.sleep(0.4)
 
 
 def play():
