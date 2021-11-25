@@ -1,2 +1,2 @@
-# SpotifyAdSkipper4.0
+# SpotifyAdSkipper5.0
 Skips Spotify Advertisements, works so far with Mac. See code for more!
