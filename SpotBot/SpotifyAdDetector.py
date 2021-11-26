@@ -1,5 +1,6 @@
 import subprocess
-
+from pynput.keyboard import Key, Controller
+import atexit
 import requests
 import time
 import os
@@ -9,10 +10,13 @@ from threading import Thread
 from subprocess import call
 
 SPOTIFY_GET_CURRENT_TRACK_URL = 'https://api.spotify.com/v1/me/player/currently-playing'
-ACCESS_TOKEN = 'w'
+KEY = 'BQCyH67q-aeGN6j1JwuzOF339gYMac0fj8jm24W68Vs11El4vFlIKjmmqzm10ZWBHVx_eoYw0IwKw0zAysarUZMWA-Ax0TohKFmf0mBEfVQzKNIR8zidpiNPAhjSof9Megb_Uj7OQNSxeWjjmMWYI62JtXwVWnANP8DbxmT_rNk2e8EXxwtf'
+ACCESS_TOKEN = KEY
 
-AD_PLAYING = False
+def exit():
+    os.system("pkill Spotify")
 
+atexit.register(exit)#quits spotify in exit
 
 def get_current_track(access_token):
     try:
@@ -42,10 +46,6 @@ def get_current_track(access_token):
         return current_track_info
 
     except Exception as e:
-        if KeyError:
-            global ACCESS_TOKEN
-            os.system("open https://developer.spotify.com/console/get-user-player/?market=&additional_types=")
-            ACCESS_TOKEN = input("Enter Key: ")
         print(e, 'in get_current_track')
         close()
         open()
@@ -53,6 +53,7 @@ def get_current_track(access_token):
         minimize()
         time.sleep(1)
         main()
+
 
 
 
@@ -67,6 +68,7 @@ def main():
                     current_track_info,
                     indent=40,
                 )
+
                 print(' ')
                 current_track_id = current_track_info['id']
         except Exception as e:
@@ -94,6 +96,7 @@ def pause():
     subprocess.call(['osascript', '-e', 'tell application "Spotify" to pause'])
 
 def minimize():
+    time.sleep(0.3)
     keyboard.press('command+m')
 if __name__ == '__main__':
     main()
