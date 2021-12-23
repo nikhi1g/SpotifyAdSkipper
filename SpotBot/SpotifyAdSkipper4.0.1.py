@@ -1,9 +1,14 @@
+import json
 import subprocess
+import time
 # import applescript
+from json import JSONDecodeError
+from subprocess import call
 import keyboard
 import os
 from time import sleep
 from threading import Thread
+import osascript
 import SpotifyAdDetector
 
 class AdChecker():
@@ -37,7 +42,7 @@ class AdChecker():
         while True: #loop, check for error, which means either auth token broken or ad detected
             SpotifyAdDetector.main()
             try:
-                if SpotifyAdDetector.AD_PLAYING:
+                if SpotifyAdDetector.AD_PLAYING == True:
                     os.system("pkill Spotify")
                     print('killed spotify')
                     sleep(0.3)
@@ -50,8 +55,7 @@ class AdChecker():
                     subprocess.call(['osascript', '-e', 'tell application "Spotify" to play'])
                     print('spotify to play')
                     sleep(2)
-                    # sleep(0.5)
-                    # keyboard.press('command+m')
+
 
             except Exception: #this is unnecessary
                 print('Catch Error Please')
