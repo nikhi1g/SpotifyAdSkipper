@@ -29,11 +29,11 @@ keyon = t
 
 
 
-if keyon:
+def onstartup():
     print('Get_Key')
     print(K)
     os.system("open https://developer.spotify.com/console/get-user-player/?market=&additional_types=")
-    sleep(0.5)
+    sleep(1.5)
     p.moveTo(733,834,0.2)
     p.click()
     p.moveTo(463, 453,0.2)
@@ -46,19 +46,20 @@ if keyon:
     p.moveTo(353, 829, 0.5)
     p.mouseDown()
     p.moveTo(860, 829, 0.5)
-    p.hotkey('command','c')
+    p.hotkey('command','x')
+    sleep(0.4)
     p.hotkey('command', 'w')
     sleep(0.5)
     os.system("open -a PyCharm")
     sleep(0.5)
     s = pyp.paste()
+    global ACCESS_TOKEN
     ACCESS_TOKEN = s
     print("Get_Key_Complete","\n" + s)
-    sleep(10)
+    sleep(4)
     #KEY = input("Just Blank or Find Key: "), dont use this as it will just lead to wait errors
 
-#don't abuse this too much or you will get ratelimited
-
+#don't abuse this too much or you will get ratelimited ;(
 def exit():
     os.system("pkill Spotify")
     # subprocess.call(['osascript', '-e', 'tell application "System Events" to sleep']) #useful sleep function
@@ -84,6 +85,7 @@ def main():
         except Exception as e:
             print(e, 'in main')
             main()
+
             # break
 
         time.sleep(1)
@@ -182,4 +184,5 @@ def minimize():
 
 
 if __name__ == '__main__':
+    onstartup()
     main()
