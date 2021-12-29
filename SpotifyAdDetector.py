@@ -9,7 +9,7 @@ import keyboard
 import pyautogui as p
 from threading import Thread
 from subprocess import call
-# from time import sleep
+from time import sleep
 # import pyperclip as pyp
 
 #link below
